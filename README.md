@@ -19,13 +19,35 @@ Download a self-contained binary from the [latest release](https://github.com/ky
 # Download (example: macOS Apple Silicon)
 curl -Lo flightclaw https://github.com/kyujin-cho/flightclaw/releases/latest/download/flightclaw-macos-arm64
 chmod +x flightclaw
-
-# Add to Claude Code
-claude mcp add flightclaw -- /path/to/flightclaw
-
-# Or add to Claude Desktop (claude_desktop_config.json)
-# { "mcpServers": { "flightclaw": { "command": "/path/to/flightclaw" } } }
 ```
+
+#### Claude Code
+
+```bash
+claude mcp add flightclaw -- /path/to/flightclaw
+```
+
+#### Claude Desktop
+
+Add the following to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "flightclaw": {
+      "command": "/path/to/flightclaw"
+    }
+  }
+}
+```
+
+Config file location by OS:
+
+| OS | Path |
+|----|------|
+| macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
+| Linux | `~/.config/Claude/claude_desktop_config.json` |
 
 The first run downloads a Python runtime (~18MB) and sets up the environment. Subsequent runs start instantly.
 
@@ -37,6 +59,23 @@ Price tracking data is stored in `~/.flightclaw/data/`. Set `FLIGHTCLAW_DATA_DIR
 pip install flights "mcp[cli]"
 claude mcp add flightclaw -- python3 /path/to/flightclaw/server.py
 ```
+
+### Japan-Korea Flight Search Skill
+
+The [`japan-korea-flights-SKILL.md`](japan-korea-flights-SKILL.md) skill teaches Claude how to efficiently search all nonstop routes from Japan to South Korea using flightclaw. It includes a complete airport route map, batching strategy, and output formatting instructions.
+
+To install as a Claude Desktop Skill:
+
+1. Open **Claude Desktop** and go to the conversation where you want the skill available
+2. Click the **Attach** (📎) button, then select **Add from computer**
+3. Choose the `japan-korea-flights-SKILL.md` file from this repository
+4. Claude will now follow the skill instructions when you ask about Japan-Korea flights
+
+Alternatively, add it to a **Claude Desktop Project** for persistent use:
+
+1. Go to **Projects** and create or open a project
+2. Under **Project knowledge**, click **Add content** and upload `japan-korea-flights-SKILL.md`
+3. All conversations within this project will have access to the skill
 
 ## MCP Server
 
