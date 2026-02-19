@@ -15,8 +15,9 @@ jobs:
         include:
           - os: macos-14
             suffix: macos-arm64
-          - os: macos-13
+          - os: macos-14
             suffix: macos-x86_64
+            scie-platform: macos-x86_64
           - os: ubuntu-latest
             suffix: linux-x86_64
           - os: ubuntu-24.04-arm
@@ -38,6 +39,8 @@ jobs:
         run: bash build.sh
         env:
           OUTPUT_SUFFIX: ${{ matrix.suffix }}
+          SCIE_PLATFORM: ${{ matrix.scie-platform }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

@@ -15,6 +15,11 @@ fi
 rm -f "$OUTPUT"
 mkdir -p dist
 
+PLATFORM_ARGS=()
+if [[ -n "${SCIE_PLATFORM:-}" ]]; then
+    PLATFORM_ARGS+=(--scie-platform "$SCIE_PLATFORM")
+fi
+
 pex \
     flights \
     "mcp[cli]" \
@@ -23,6 +28,7 @@ pex \
     -m server \
     --scie lazy \
     --scie-python-version "${PYTHON_VERSION}" \
+    "${PLATFORM_ARGS[@]}" \
     --venv \
     --venv-site-packages-copies \
     -o "$OUTPUT"

@@ -2,32 +2,45 @@
 
 Track flight prices from Google Flights. Search routes, monitor prices over time, and get alerts when prices drop.
 
-## MCP Server
+## Install
 
-FlightClaw runs as a local [MCP](https://modelcontextprotocol.io) server, giving any MCP-compatible client (Claude Code, Claude Desktop, etc.) access to flight search and tracking tools.
+### Pre-built binary (recommended)
 
-### Setup
+Download a self-contained binary from the [latest release](https://github.com/kyujin-cho/flightclaw/releases/latest). No Python installation required.
+
+| Platform | Binary |
+|----------|--------|
+| macOS (Apple Silicon) | `flightclaw-macos-arm64` |
+| macOS (Intel) | `flightclaw-macos-x86_64` |
+| Linux (x86_64) | `flightclaw-linux-x86_64` |
+| Linux (arm64) | `flightclaw-linux-arm64` |
 
 ```bash
-# Install dependencies
-pip install flights "mcp[cli]"
+# Download (example: macOS Apple Silicon)
+curl -Lo flightclaw https://github.com/kyujin-cho/flightclaw/releases/latest/download/flightclaw-macos-arm64
+chmod +x flightclaw
 
 # Add to Claude Code
+claude mcp add flightclaw -- /path/to/flightclaw
+
+# Or add to Claude Desktop (claude_desktop_config.json)
+# { "mcpServers": { "flightclaw": { "command": "/path/to/flightclaw" } } }
+```
+
+The first run downloads a Python runtime (~18MB) and sets up the environment. Subsequent runs start instantly.
+
+Price tracking data is stored in `~/.flightclaw/data/`. Set `FLIGHTCLAW_DATA_DIR` to customize.
+
+### From source
+
+```bash
+pip install flights "mcp[cli]"
 claude mcp add flightclaw -- python3 /path/to/flightclaw/server.py
 ```
 
-Or in Claude Desktop, add to `claude_desktop_config.json`:
+## MCP Server
 
-```json
-{
-  "mcpServers": {
-    "flightclaw": {
-      "command": "python3",
-      "args": ["/path/to/flightclaw/server.py"]
-    }
-  }
-}
-```
+FlightClaw runs as a local [MCP](https://modelcontextprotocol.io) server, giving any MCP-compatible client (Claude Code, Claude Desktop, etc.) access to flight search and tracking tools.
 
 ### Tools
 
@@ -88,7 +101,7 @@ python scripts/list-tracked.py
 
 - Queries Google Flights via the `fli` library
 - Prices returned in user's local currency (auto-detected from IP)
-- Price history persists in `data/tracked.json`
+- Price history persists in `~/.flightclaw/data/tracked.json` (binary) or `data/tracked.json` (source)
 - Supports one-way and round trips, all cabin classes (economy to first)
 - Filter by airline, price, duration, departure/arrival times, layover duration
 - Multi-airport and date-range searches expand into all combinations
