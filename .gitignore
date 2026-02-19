@@ -1,3 +1,4 @@
 data/tracked.json
 __pycache__/
 *.pyc
+dist/

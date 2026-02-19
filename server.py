@@ -11,7 +11,9 @@ from itertools import product
 from mcp.server.fastmcp import FastMCP
 
 # Add scripts dir to path so we can import search_utils
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
+_scripts_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts")
+if os.path.isdir(_scripts_dir):
+    sys.path.insert(0, _scripts_dir)
 
 from fli.models import (
     Airport,
@@ -33,7 +35,10 @@ from search_utils import fmt_price, search_with_currency
 
 mcp = FastMCP("flightclaw")
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+DATA_DIR = os.environ.get(
+    "FLIGHTCLAW_DATA_DIR",
+    os.path.join(os.path.expanduser("~"), ".flightclaw", "data"),
+)
 TRACKED_FILE = os.path.join(DATA_DIR, "tracked.json")
 
 SEAT_MAP = {
